@@ -37,17 +37,58 @@ function getGenePool(genome) {
 
 // Get fittest
 function getFittest(pool) {
-	var newFit = 0;
+	var fittestLoc = 0;
 	var fittest;
 	for (var i = 0; i < 50; i++) {
 		var current = getFitness(pool[i]);
-		if (current > newFit) {
-			newFit = current;
-			fittest = pool[i];
+		if (getFitness(pool[i]) > fittest) {
+			fittest = getFitness(pool[i]);
+			fittestLoc = i;
 		}
 	}
 	return fittest;
 }
+
+// Mutation function
+function doMutation(genome) {
+	var newGenome = "";
+	for (i = 0; i < genome.length; i++) {
+		if (Math.floor(Math.random() * MUT_PROB) === 1) {
+			if (genome[i] != TARGET[i]) {
+				newGenome += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+			} else {
+				newGenome += genome[i];
+			}
+		} else {
+			newGenome += genome[i];
+		}
+	}
+	return newGenome;
+}
+
+function evolve() {
+	var n = 0;
+	var fittest = generateGenome();
+	console.log(fittest);
+	while(getFitness(fittest) !== 28) {
+		n++;
+		var pool = getGenePool(fittest);
+		var newPool = [];
+		for (var i = 0; i < pool.length; i++) {
+			newPool[i] = doMutation(pool[i]);
+		}
+		fittest = getFittest(newPool);
+		if (n % 10 === 0) {
+			console.log(fittest);
+		}
+	}
+	return fittest;
+}
+
+
+
+
+evolve();
 
 // Generate genome
 var genome = generateGenome();
