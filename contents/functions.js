@@ -7,3 +7,4 @@ var multiply = function(n) {
 
 console.log(multiply(2));
 
+// !! Add more examples !!
